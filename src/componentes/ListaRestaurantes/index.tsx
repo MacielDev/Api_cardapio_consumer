@@ -28,7 +28,11 @@ const ListaRestaurantes = () => {
       setRestaurantes([...restaurantes,...resposta.data.results]);
       setProximaPagina(resposta.data.next);
     })
+    .catch(resposta => {
+      console.log(resposta)
+    })
   }
+  
   return (<section className={style.ListaRestaurantes}>
     <h1>Os restaurantes mais <em>bacanas</em>!</h1>
     {restaurantes?.map(item => <Restaurante restaurante={item} key={item.id} />)}
