@@ -1,34 +1,55 @@
-import { Button, TextField } from "@mui/material";
+import { Button, Container, TextField } from "@mui/material";
 import axios from "axios";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { useParams } from "react-router-dom";
+import IRestaurante from "../../../../../interfaces/IRestaurante";
 
 const FormularioRestaurante = () => {
   const [nomeRestaurante, setNomeRestaurante] = useState("");
+  
+  const parametros = useParams();
 
-  const handleSubmitName =(event:React.FormEvent<HTMLFormElement>) =>{
-    event.preventDefault();
-    console.log("Vou enviar o restaurante");
-    console.log(nomeRestaurante);
-    axios.post('http://0.0.0.0:8000/api/v2/restaurantes/',{
-      nome:nomeRestaurante
-    })
-    .then(() => alert(`Restaurante ${nomeRestaurante} cadastrado com sucesso`))
+  useEffect(() => {
+    if(parametros.id){
+      axios.get<IRestaurante>(`http://0.0.0.0:8000/api/v2/restaurantes/${parametros.id}/`)
+        .then(resposta => setNomeRestaurante(resposta.data.nome))
+    }
+  },[parametros])
+
+  const aoSubmeterForm =(evento:React.FormEvent<HTMLFormElement>) =>{
+    evento.preventDefault();
+
+
+    if(parametros.id){
+      axios.put(`http://0.0.0.0:8000/api/v2/restaurantes/${parametros.id}/`,{
+        nome:nomeRestaurante
+      })
+      .then(() => alert(`Restaurante atualizado com sucesso`))
+    }else{
+      axios.post('http://0.0.0.0:8000/api/v2/restaurantes/',{
+        nome:nomeRestaurante
+      })
+      .then(() => alert(`Restaurante ${nomeRestaurante} cadastrado com sucesso`))
+    }
+
   }
   return (
-    <form onSubmit={handleSubmitName}>
-      <TextField
-        value={nomeRestaurante}
-        onChange={event => setNomeRestaurante(event.target.value)}
-        label="Nome do restaurante"
-        variant="standard"
-      />
-      <Button 
-        type="submit" 
-        variant="outlined"
-        >
-        Salvar
-      </Button>
-    </form>
+    <Container maxWidth="sm">
+      <form onSubmit={aoSubmeterForm}> 
+        <TextField
+          value={nomeRestaurante}
+          onChange={event => setNomeRestaurante(event.target.value)}
+          label="Nome do restaurante"
+          variant="standard"
+        />
+        <Button 
+          type="submit" 
+          variant="outlined"
+          >
+          Salvar
+        </Button>
+      </form>
+    </Container>
   );
 };
 
