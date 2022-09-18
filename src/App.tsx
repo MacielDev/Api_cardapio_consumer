@@ -1,4 +1,7 @@
 import { Routes, Route } from 'react-router-dom';
+import PaginaBaseAdminstracao from './paginas/Administracao/PaginaBaseAdminstracao';
+import AdminstracaoPratos from './paginas/Administracao/Pratos/AdminstracaoPratos';
+import FormularioPrato from './paginas/Administracao/Pratos/FormularioPrato';
 import AdministracaoRestaurantes from './paginas/Administracao/Restaurantes/AdministracaoRestaurantes';
 import FormularioRestaurante from './paginas/Administracao/Restaurantes/AdministracaoRestaurantes/FormularioRestaurante';
 import Home from './paginas/Home';
@@ -10,9 +13,18 @@ function App() {
     <Routes>
       <Route path="/" element={<Home />} />
       <Route path="/restaurantes" element={<VitrineRestaurantes />} />
-      <Route path="/admin/restaurantes" element={<AdministracaoRestaurantes />} />
-      <Route path="/admin/restaurantes/novo" element={<FormularioRestaurante />} />
-      <Route path="/admin/restaurantes/:id" element={<FormularioRestaurante />} />
+      <Route path="/admin" element={<PaginaBaseAdminstracao/>}>
+
+        {/* Restaurantes Admin */}
+        <Route path="restaurantes" element={<AdministracaoRestaurantes />} />
+        <Route path="restaurantes/novo" element={<FormularioRestaurante />} />
+        <Route path="restaurantes/:id" element={<FormularioRestaurante />} />
+
+        {/* Pratos Admin */}
+        <Route path="pratos" element={<AdminstracaoPratos />} />
+        <Route path="pratos/novo" element={<FormularioPrato />} />
+        <Route path="pratos/:id" element={<FormularioPrato />} />
+      </Route>
     </Routes>
   );
 }
